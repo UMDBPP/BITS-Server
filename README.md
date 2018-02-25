@@ -1,2 +1,2 @@
-# BITS
-Flight code for the Balloon Iridium Telemetry System inside Command Module
+# BITS-Server
+Server API passthrough for the Balloon Iridium Telemetry System 
