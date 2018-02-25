@@ -1,2 +1,2 @@
 # BITS-Server
-Server API passthrough for the Balloon Iridium Telemetry System 
+Server API passthrough using Flask-SocietIO for the Balloon Iridium Telemetry System 
