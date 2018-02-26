@@ -27,6 +27,6 @@ The main app for BITS-Server.
 from flask import Flask
 app = Flask(__name__)
 
-@app.route("/test")
-def hello():
-    return "Under constuction."
+@app.route(r"/test")
+def under_construction():
+    return 'Flask app currently under construction'
