@@ -22,6 +22,7 @@
 
 """
 The main app for BITS-Server.
+Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
 
 from flask import Flask
@@ -30,3 +31,4 @@ app = Flask(__name__)
 @app.route(r"/test")
 def under_construction():
     return 'Flask app currently under construction'
+
