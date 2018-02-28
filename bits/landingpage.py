@@ -22,10 +22,11 @@
 
 """
 The landing page for BITS-Server.
+Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
 
 from bits import flask_instance, socketio_instance
 
-@flask_instance.route("/")
-def hello():
-    return "<h1 style='color:black'>Under constuction.</h1>"
+@flask_instance.route(r"/")
+def under_construction():
+    return 'Flask app currently under construction.'
