@@ -1,4 +1,4 @@
-# BITS-Server app.py
+# BITS-Server landingpage.py
 # 
 # Copyright (c) 2018 University of Maryland Space Systems Lab Balloon Payload Program
 # 
@@ -21,12 +21,11 @@
 # SOFTWARE.
 
 """
-The main app for BITS-Server.
+The landing page for BITS-Server.
 """
 
-from flask import Flask
-app = Flask(__name__)
+from bits import flask_instance, socketio_instance
 
-@app.route("/test")
+@flask_instance.route("/")
 def hello():
-    return "Under constuction."
+    return "<h1 style='color:black'>Under constuction.</h1>"

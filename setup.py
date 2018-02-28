@@ -5,8 +5,9 @@ from setuptools import setup, Extension
 
 
 setup(
-    name="BITS",
+    name="bits",
     version="0.1.0",
+    include_package_data=True,
     author='Univeristy of Maryland Space Systems Laboratory Balloon Payload Program',
     author_email='nearspace@ssl.umd.edu',
     packages=['bits'],
