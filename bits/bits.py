@@ -1,4 +1,4 @@
-# BITS-Server landingpage.py
+# BITS-Server bits.py
 # 
 # Copyright (c) 2018 University of Maryland Space Systems Lab Balloon Payload Program
 # 
@@ -25,8 +25,9 @@ The landing page for BITS-Server.
 Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
 
-from bits import flask_instance
+from bits import flask_instance, socketio_instance
 
-@flask_instance.route(r"/")
+# route requests for / to a landing page
+@flask_instance.route('/')
 def under_construction():
     return 'Flask app currently under construction.'

@@ -16,7 +16,7 @@ flask_instance.config.update(dict(
     PASSWORD='default'
 ))
 
-import bits.bits
+socketio_instance = SocketIO(flask_instance)
 
-#if __name__ == '__main__':
-#    socketio.run(flask_instance)
+if __name__ == '__main__':
+    socketio_instance.run(flask_instance)
