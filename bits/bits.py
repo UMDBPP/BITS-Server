@@ -27,7 +27,7 @@ Flask implementation (pip install Flask) running WebSocket protocol (pip install
 
 from bits import flask_instance, socketio_instance
 
-# route requests for / to a landing page
+# respond to requests for / with an "under construction" page
 @flask_instance.route('/')
 def under_construction():
-    return 'Flask app currently under construction.'
+    return flask_instance.send_static_file('under_construction.html')
