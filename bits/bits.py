@@ -25,7 +25,7 @@ The landing page for BITS-Server.
 Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
 
-from bits import flask_instance, socketio_instance
+from bits import flask_instance
 
 @flask_instance.route(r"/")
 def under_construction():
