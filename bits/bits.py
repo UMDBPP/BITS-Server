@@ -53,5 +53,6 @@ def error_handler_bits(e):
 
 @socketio.on('json')
 def handle_json(json):
-    print('received json: ' + str(json.loads(json)))
-    send(json, json=True)
+    input_json = json.loads(json)
+    print('received json: ' + str(input_json))
+    send(input_json, json=True)
