@@ -20,14 +20,38 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 """
 The landing page for BITS-Server.
 Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
+from bits import flask_instance, socketio_instance as socketio
+from flask_socketio import send, emit, Namespace
 
-from bits import flask_instance, socketio_instance
+import json
 
 # respond to requests for / with an "under construction" page
 @flask_instance.route('/')
 def under_construction():
     return flask_instance.send_static_file('under_construction.html')
+
+class bits(Namespace):
+    def on_connect(self):
+        print('Client connected to bits')
+
+    def on_disconnect(self):
+        print('Client disconnected to bits')
+
+    def on_my_event(self, data):
+        emit('my_response', data)
+
+socketio.on_namespace(bits('/test'))
+
+@socketio.on_error('/bits') # handles the '/bits' namespace
+def error_handler_bits(e):
+    pass
+
+@socketio.on('json')
+def handle_json(json):
+    print('received json: ' + str(json.loads(json)))
+    send(json, json=True)

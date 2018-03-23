@@ -18,5 +18,6 @@ flask_instance.config.update(dict(
 
 socketio_instance = SocketIO(flask_instance)
 
-if __name__ == '__main__':
-    socketio_instance.run(flask_instance)
+# commented out to use gunicorn server
+#if __name__ == '__main__':
+#    socketio_instance.run(flask_instance)
