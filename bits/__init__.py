@@ -7,9 +7,9 @@ __name__ = "bits"
 flask_instance = Flask(__name__)
 
 # load config from this file
-flask_instance.config.from_object(__name__)
+#flask_instance.config.from_object(__name__)
 
-# default configuration settings
+# override configuration settings
 flask_instance.config.update(dict(
     SECRET_KEY='secret!',
     USERNAME='admin',

@@ -25,9 +25,12 @@
 The landing page for BITS-Server.
 Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
-from bits import flask_instance, socketio_instance as socketio
+
+# import flask and web socket libraries, as well as special functions
+from bits import flask_instance, socketio_instance
 from flask_socketio import send, emit, Namespace
 
+# improt JSON library for message forwarding
 import json
 
 # respond to requests for / with an "under construction" page
@@ -35,6 +38,7 @@ import json
 def under_construction():
     return flask_instance.send_static_file('under_construction.html')
 
+# create BITS namespace class
 class bits(Namespace):
     def on_connect(self):
         print('Client connected to bits')
@@ -45,14 +49,17 @@ class bits(Namespace):
     def on_my_event(self, data):
         emit('my_response', data)
 
-socketio.on_namespace(bits('/test'))
+# define instance to namespace (instantiate object)
+socketio_instance.on_namespace(bits('/test'))
 
-@socketio.on_error('/bits') # handles the '/bits' namespace
+# define error handler
+@socketio_instance.on_error('/bits') # handles the '/bits' namespace
 def error_handler_bits(e):
     pass
 
-@socketio.on('json')
+# upon receiving a JSON message via web socket, broadcast the received JSON over the namespace
+@socketio_instance.on('json')
 def handle_json(json):
     input_json = json.loads(json)
     print('received json: ' + str(input_json))
-    send(input_json, json=True)
+    send(input_json, json=True, broadcast=True)
