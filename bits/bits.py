@@ -63,3 +63,7 @@ def handle_json(json):
     input_json = json.loads(json)
     print('received json: ' + str(input_json))
     send(input_json, json=True, broadcast=True)
+
+# use gunicorn server?
+if __name__ == '__main__':
+    socketio_instance.run(flask_instance, debug=True)
