@@ -26,17 +26,49 @@ The landing page for BITS-Server.
 Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
 
-# import flask and web socket libraries, as well as special functions
-from bits import flask_instance, socketio_instance
-from flask_socketio import send, emit, Namespace
-
-# improt JSON library for message forwarding
+# import flask and web socket libraries, as well as special functions and JSON library
+from flask import Flask, request, url_for
+from flask_socketio import SocketIO, send, emit, Namespace
 import json
+
+## application setup
+__name__ = "__main__"
+
+# create the application instance
+flask_instance = Flask(__name__)
+
+# load config from this file
+#flask_instance.config.from_object(__name__)
+
+# override configuration settings
+flask_instance.config.update(dict(
+    SECRET_KEY='secret!',
+    USERNAME='admin',
+    PASSWORD='default'
+))
+
+socketio_instance = SocketIO(flask_instance)
+
+## main program
 
 # respond to requests for / with an "under construction" page
 @flask_instance.route('/')
 def under_construction():
-    return flask_instance.send_static_file('under_construction.html')
+    return 'under contruction'
+    #return flask_instance.send_static_file('under_construction.html')
+
+# handle POST to the server from elsewhere
+@flask_instance.route('/', methods=['POST'])
+def parse_request():
+    rckblock_imei = request.form['imei']
+    message_sequence_no = request.form['momsn']
+    transmit_time = request.form['transmit_time']
+    approx_latitude = request.form['iridium_latitude']
+    approx_longitude = request.form['iridium_longitude']
+    location_uncertainty_km = request.form['iridium_cep']
+    message = request.form['data']
+
+    # TODO return HTTP 200
 
 # create BITS namespace class
 class bits(Namespace):
@@ -44,7 +76,7 @@ class bits(Namespace):
         print('Client connected to bits')
 
     def on_disconnect(self):
-        print('Client disconnected to bits')
+        print('Client disconnected from bits')
 
     def on_my_event(self, data):
         emit('my_response', data)
