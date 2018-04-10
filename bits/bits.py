@@ -27,9 +27,8 @@ Flask implementation (pip install Flask) running WebSocket protocol (pip install
 """
 
 # import flask and web socket libraries, as well as special functions and JSON library
-from flask import Flask, request, url_for
+from flask import Flask, request
 from flask_socketio import SocketIO, send, emit, Namespace
-import json
 
 ## application setup
 __name__ = "__main__"
@@ -38,7 +37,7 @@ __name__ = "__main__"
 flask_instance = Flask(__name__)
 
 # load config from this file
-#flask_instance.config.from_object(__name__)
+# flask_instance.config.from_object(__name__)
 
 # override configuration settings
 flask_instance.config.update(dict(
@@ -49,13 +48,15 @@ flask_instance.config.update(dict(
 
 socketio_instance = SocketIO(flask_instance)
 
+
 ## main program
 
 # respond to requests for / with an "under construction" page
 @flask_instance.route('/')
 def under_construction():
     return 'under contruction'
-    #return flask_instance.send_static_file('under_construction.html')
+    # return flask_instance.send_static_file('under_construction.html')
+
 
 # handle POST to the server from elsewhere
 @flask_instance.route('/', methods=['POST'])
@@ -70,6 +71,7 @@ def parse_request():
 
     # TODO return HTTP 200
 
+
 # create BITS namespace class
 class bits(Namespace):
     def on_connect(self):
@@ -81,13 +83,16 @@ class bits(Namespace):
     def on_my_event(self, data):
         emit('my_response', data)
 
+
 # define instance to namespace (instantiate object)
 socketio_instance.on_namespace(bits('/test'))
 
+
 # define error handler
-@socketio_instance.on_error('/bits') # handles the '/bits' namespace
+@socketio_instance.on_error('/bits')  # handles the '/bits' namespace
 def error_handler_bits(e):
     pass
+
 
 # upon receiving a JSON message via web socket, broadcast the received JSON over the namespace
 @socketio_instance.on('json')
@@ -95,6 +100,7 @@ def handle_json(json):
     input_json = json.loads(json)
     print('received json: ' + str(input_json))
     send(input_json, json=True, broadcast=True)
+
 
 # use gunicorn server?
 if __name__ == '__main__':

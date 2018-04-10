@@ -1,8 +1,4 @@
-import sys
-import os
-import fnmatch
-from setuptools import setup, Extension
-
+from setuptools import setup
 
 setup(
     name="bits",
@@ -21,4 +17,3 @@ setup(
         "gunicorn",
     ],
 )
-
