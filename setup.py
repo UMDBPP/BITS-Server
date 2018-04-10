@@ -4,7 +4,7 @@ setup(
     name="bits",
     version="0.1.0",
     include_package_data=True,
-    author='Univeristy of Maryland Space Systems Laboratory Balloon Payload Program',
+    author='University of Maryland Space Systems Laboratory Balloon Payload Program',
     author_email='nearspace@ssl.umd.edu',
     packages=['bits'],
     zip_safe=False,
