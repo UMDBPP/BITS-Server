@@ -28,10 +28,6 @@ Flask implementation (pip install Flask) running WebSocket protocol (pip install
 
 # import flask and web socket libraries, as well as special functions and JSON library
 from flask import Flask, request
-from flask_socketio import SocketIO, send, emit, Namespace
-
-## application setup
-__name__ = "__main__"
 
 # create the application instance
 flask_instance = Flask(__name__)
@@ -46,62 +42,35 @@ flask_instance.config.update(dict(
     PASSWORD='default'
 ))
 
-socketio_instance = SocketIO(flask_instance)
-
-
-## main program
-
 # respond to requests for / with an "under construction" page
 @flask_instance.route('/')
 def under_construction():
-    return 'under contruction'
-    # return flask_instance.send_static_file('under_construction.html')
-
+    flask_instance.send_static_file('under_construction.html')
+    return 'under_construction'
 
 # handle POST to the server from elsewhere
 @flask_instance.route('/', methods=['POST'])
-def parse_request():
-    imei = request.form['imei'] # IMEI of RockBlock hardware
-    momsn = request.form['momsn'] # message sequence number
+def parse_POST_request():
+    imei = request.form['imei']  # IMEI of RockBlock hardware
+    momsn = request.form['momsn']  # message sequence number
     transmit_time = request.form['transmit_time']
     iridium_latitude = request.form['iridium_latitude']
     iridium_longitude = request.form['iridium_longitude']
-    iridium_cep = request.form['iridium_cep'] # in km
+    iridium_cep = request.form['iridium_cep']  # in km
     data = request.form['data']
 
-    # TODO return HTTP 200
+    # TODO store data
 
+    # return HTTP status 200
+    return 200
 
-# create BITS namespace class
-class bits(Namespace):
-    def on_connect(self):
-        print('Client connected to bits')
+# handle GET to the server from elsewhere
+@flask_instance.route('/', methods=['GET'])
+def parse_GET_request():
+    # TODO retrieve data
 
-    def on_disconnect(self):
-        print('Client disconnected from bits')
+    # return HTTP status 200
+    return 200
 
-    def on_my_event(self, data):
-        emit('my_response', data)
-
-
-# define instance to namespace (instantiate object)
-socketio_instance.on_namespace(bits('/test'))
-
-
-# define error handler
-@socketio_instance.on_error('/bits')  # handles the '/bits' namespace
-def error_handler_bits(e):
-    pass
-
-
-# upon receiving a JSON message via web socket, broadcast the received JSON over the namespace
-@socketio_instance.on('json')
-def handle_json(json):
-    input_json = json.loads(json)
-    print('received json: ' + str(input_json))
-    send(input_json, json=True, broadcast=True)
-
-
-# use gunicorn server?
-if __name__ == '__main__':
-    socketio_instance.run(flask_instance, debug=True)
+if __name__ == "__main__":
+    flask_instance.run()
