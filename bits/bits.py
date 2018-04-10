@@ -61,13 +61,13 @@ def under_construction():
 # handle POST to the server from elsewhere
 @flask_instance.route('/', methods=['POST'])
 def parse_request():
-    rckblock_imei = request.form['imei']
-    message_sequence_no = request.form['momsn']
+    imei = request.form['imei'] # IMEI of RockBlock hardware
+    momsn = request.form['momsn'] # message sequence number
     transmit_time = request.form['transmit_time']
-    approx_latitude = request.form['iridium_latitude']
-    approx_longitude = request.form['iridium_longitude']
-    location_uncertainty_km = request.form['iridium_cep']
-    message = request.form['data']
+    iridium_latitude = request.form['iridium_latitude']
+    iridium_longitude = request.form['iridium_longitude']
+    iridium_cep = request.form['iridium_cep'] # in km
+    data = request.form['data']
 
     # TODO return HTTP 200
 
