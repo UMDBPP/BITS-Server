@@ -26,7 +26,7 @@ The landing page for BITS-Server.
 Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
 
-# import flask and web socket libraries, as well as special functions and JSON library
+import requests
 from flask import Flask, request
 
 # create the application instance
@@ -42,15 +42,18 @@ flask_instance.config.update(dict(
     PASSWORD='default'
 ))
 
+debug = False
+
+
 # respond to requests for / with an "under construction" page
 @flask_instance.route('/')
 def under_construction():
-    flask_instance.send_static_file('under_construction.html')
-    return 'under_construction'
+    return flask_instance.send_static_file('under_construction.html')
 
-# handle POST to the server from elsewhere
-@flask_instance.route('/', methods=['POST'])
-def parse_POST_request():
+
+# handle POST from the Iridium servers (originating from the payload) and log it
+@flask_instance.route('/incoming', methods=['POST'])
+def from_payload():
     imei = request.form['imei']  # IMEI of RockBlock hardware
     momsn = request.form['momsn']  # message sequence number
     transmit_time = request.form['transmit_time']
@@ -59,18 +62,71 @@ def parse_POST_request():
     iridium_cep = request.form['iridium_cep']  # in km
     data = request.form['data']
 
-    # TODO store data
+    json = request.get_json()
 
-    # return HTTP status 200
-    return 200
+    # TODO store data to be retrieved later by GET requests
 
-# handle GET to the server from elsewhere
+    if debug:
+        return json
+    else:
+        # return HTTP status 200
+        return 200
+
+
+# forward POST from the ground station to the Iridium servers for transfer to the payload
+@flask_instance.route('/outgoing', methods=['POST'])
+def to_payload():
+    outgoing_dict = {'imei': request.form['imei'],  # IMEI of RockBlock hardware
+                     'username': request.form['username'],
+                     'password': request.form['password'],
+                     'data': request.form['data']
+                     }
+
+    # send data to RockBlock using POST
+    post_reponse = requests.post('https://core.rock7.com/rockblock/MT', json=outgoing_dict)
+
+    error_code, description = post_reponse.text.split(',')
+
+    if error_code == 'OK':
+        # do nothing
+        pass
+    elif error_code == '10':
+        # Invalid login credentials
+        pass
+    elif error_code == '11':
+        # No RockBLOCK with this IMEI found on your account
+        pass
+    elif error_code == '12':
+        # RockBLOCK has no line rental
+        pass
+    elif error_code == '13':
+        # Your account has insufficient credit
+        pass
+    elif error_code == '14':
+        # Could not decode hex data
+        pass
+    elif error_code == '15':
+        # Data too long
+        pass
+    elif error_code == '16':
+        # No data
+        pass
+    elif error_code == '99':
+        # System Error
+        pass
+
+    # return response
+    return post_reponse.text
+
+
+# handle GET request from the ground station for stored payload messages
 @flask_instance.route('/', methods=['GET'])
-def parse_GET_request():
-    # TODO retrieve data
+def request_messages():
+    # TODO retrieve data stored from Iridium servers
 
-    # return HTTP status 200
-    return 200
+    # return data
+    return 'not implemented yet'
+
 
 if __name__ == "__main__":
     flask_instance.run()
