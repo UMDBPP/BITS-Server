@@ -26,10 +26,12 @@ The landing page for BITS-Server.
 Flask implementation
 """
 
+import json
+
 import os
 import requests
-import json
 from flask import request
+
 from bits import flask_instance
 
 debug = False
@@ -44,8 +46,8 @@ def insert_record(record):
 
 # respond to requests for / with an "under construction" page
 @flask_instance.route('/')
-def under_construction():
-    return flask_instance.send_static_file('under_construction.html')
+def index():
+    return flask_instance.send_static_file('index.html')
 
 
 # handle POST from the Iridium servers (originating from the payload) and log it
