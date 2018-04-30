@@ -29,20 +29,8 @@ Flask implementation (pip install Flask) running WebSocket protocol (pip install
 import os
 import requests
 import json
-from flask import Flask, request
-
-# create the application instance
-flask_instance = Flask(__name__)
-
-# load config from this file
-# flask_instance.config.from_object(__name__)
-
-# override configuration settings
-flask_instance.config.update(dict(
-    SECRET_KEY='secret!',
-    USERNAME='admin',
-    PASSWORD='default'
-))
+from flask import request
+from bits import flask_instance
 
 debug = False
 log_dir = 'logs'
