@@ -23,7 +23,7 @@
 
 """
 The landing page for BITS-Server.
-Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
+Flask implementation
 """
 
 import os
