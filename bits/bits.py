@@ -26,7 +26,9 @@ The landing page for BITS-Server.
 Flask implementation (pip install Flask) running WebSocket protocol (pip install flask-socketio && pip install eventlet)
 """
 
+import os
 import requests
+import json
 from flask import Flask, request
 
 # create the application instance
@@ -43,6 +45,13 @@ flask_instance.config.update(dict(
 ))
 
 debug = False
+log_dir = 'logs'
+log_path = os.path.join(log_dir, 'log.json')
+
+
+def insert_record(record):
+    with open(log_path, 'a') as logfile:
+        logfile.write(record)
 
 
 # respond to requests for / with an "under construction" page
@@ -62,12 +71,12 @@ def from_payload():
     iridium_cep = request.form['iridium_cep']  # in km
     data = request.form['data']
 
-    json = request.get_json()
+    form_json = request.json
 
-    # TODO store data to be retrieved later by GET requests
+    insert_record(form_json)
 
     if debug:
-        return json
+        return form_json
     else:
         # return HTTP status 200
         return 200
@@ -121,11 +130,12 @@ def to_payload():
 
 # handle GET request from the ground station for stored payload messages
 @flask_instance.route('/', methods=['GET'])
-def request_messages():
-    # TODO retrieve data stored from Iridium servers
+def to_ground():
+    with open(log_path, 'r') as logfile:
+        outgoing_json = json.loads(logfile.read())
 
     # return data
-    return 'not implemented yet'
+    return outgoing_json
 
 
 if __name__ == "__main__":
