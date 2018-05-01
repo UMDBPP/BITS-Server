@@ -35,7 +35,7 @@ from flask import request
 from bits import flask_instance
 
 debug = False
-log_dir = 'logs'
+log_dir = 'message_logs'
 log_path = os.path.join(log_dir, 'log.json')
 
 
