@@ -7,8 +7,8 @@ flask_instance = Flask(__name__, static_url_path='')
 # flask_instance.config.from_object(__name__)
 
 # override configuration settings
-flask_instance.config.update(dict(
-    SECRET_KEY='secret!',
-    USERNAME='admin',
-    PASSWORD='default'
-))
+#flask_instance.config.update(dict(
+#    SECRET_KEY='secret!',
+#    USERNAME='admin',
+#    PASSWORD='default'
+#))
