@@ -119,8 +119,8 @@ def to_payload():
 
 
 # handle GET request from the ground station for stored payload messages
-@flask_instance.route('/', methods=['GET'])
-def to_ground():
+@flask_instance.route('/messages', methods=['GET'])
+def messages_request():
     with open(log_path, 'r') as logfile:
         outgoing_json = json.loads(logfile.read())
 
